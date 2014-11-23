@@ -1,0 +1,82 @@
+package Project2;
+
+import java.awt.*;
+import java.awt.event.*;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+
+class Project2 extends JFrame {
+
+	private JTextField annualIncomeField = new JTextField(20),
+			annualInterestField = new JTextField(20),
+			itemizedDeductionsField = new JTextField(20),
+			exemptionsField = new JTextField(20),
+			taxWithheldField = new JTextField(20),
+			taxRefundField = new JTextField(20);
+	private JButton jbtTaxReturn = new JButton("Calculate Tax Return: ");
+	private double taxableIncome;
+	private static final int CLASS3 = 100000, CLASS2 = 50000;
+	
+
+	private class getInput implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int income = Integer.parseInt(annualIncomeField.getText());
+			int interest = Integer.parseInt(annualInterestField.getText());
+			int deductions = Integer
+					.parseInt(itemizedDeductionsField.getText());
+			int numofExemptions = Integer.parseInt(exemptionsField.getText());
+			int totalTaxWithheld = Integer.parseInt(taxWithheldField.getText());
+			int sum = (income + interest) - deductions - numofExemptions * 2700;
+
+			if (sum >= CLASS3) {
+				taxableIncome = 6000 + (sum - CLASS3) * 0.09;
+			} else if (sum >= CLASS2) {
+				taxableIncome = 2500 + (sum - CLASS2) * 0.07;
+			} else if (sum >= 0 && sum < CLASS2) {
+				taxableIncome = sum * 0.05;
+			}// end if else
+
+			int taxRETURN = (int) (-1 * (taxableIncome - totalTaxWithheld));
+			
+			String taxReturnString = "" + taxRETURN;//int to string
+			
+			taxRefundField.setText(taxReturnString);
+
+		}// end actionPerformed
+
+	}// end getInput
+
+	public Project2() {
+
+		super.setTitle("Tax Calculator");
+		setSize(500, 250);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLayout(new GridLayout(6, 2, 5, 5));
+		// add labels, text boxes and button
+		add(new JLabel("Annual Income: "));
+		add(annualIncomeField);
+		add(new JLabel("Annual Interest: "));
+		add(annualInterestField);
+		add(new JLabel("Itemized Deducations: "));
+		add(itemizedDeductionsField);
+		add(new JLabel("Number of Exemptions: "));
+		add(exemptionsField);
+		add(new JLabel("Tax Withheld: "));
+		add(taxWithheldField);
+		add(jbtTaxReturn, BorderLayout.WEST);
+		add(taxRefundField);
+		taxRefundField.setEditable(false);
+		jbtTaxReturn.addActionListener(new getInput());
+
+	}// end Project 2
+
+	public static void main(String[] args) {
+		Project2 frame = new Project2();
+		frame.setVisible(true);
+
+	}// end main
+
+}// end class Project2	
